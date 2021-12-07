@@ -22,6 +22,18 @@ RUN apk add --no-cache --virtual .tool-deps $TOOL_DEPS $LIB_DEPS \
  && echo "pcov.enabled=0" >> $PHP_INI_DIR/php.ini \
  && apk del .build-deps
 
+RUN docker-php-ext-install -j$(nproc) iconv
+RUN docker-php-ext-install sockets
+
+RUN apk update \
+    && apk upgrade \
+    && apk add --no-cache \
+        freetype-dev \
+        libpng-dev \
+        jpeg-dev \
+        libjpeg-turbo-dev
+RUN docker-php-ext-install gd
+
 FROM phpbase as toolbox
 
 ARG TOOLBOX_VERSION
@@ -46,8 +58,7 @@ COPY --from=toolbox /toolbox $TOOLBOX_TARGET_DIR/toolbox
 COPY --from=composer:2 /usr/bin/composer $TOOLBOX_TARGET_DIR/composer
 COPY entrypoint.sh /entrypoint.sh
 
-RUN php $TOOLBOX_TARGET_DIR/toolbox install \
- && rm -rf $COMPOSER_HOME/cache
+RUN php $TOOLBOX_TARGET_DIR/toolbox install
 
 WORKDIR $TOOLBOX_TARGET_DIR
 ENTRYPOINT ["/entrypoint.sh"]
