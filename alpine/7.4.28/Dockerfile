@@ -1,7 +1,7 @@
-ARG PHP_VERSION=7.2
+ARG PHP_VERSION=7.4.28
 ARG BASE_IMAGE=php:${PHP_VERSION}-alpine
 ARG TOOLBOX_EXCLUDED_TAGS="exclude-php:${PHP_VERSION}"
-ARG TOOLBOX_VERSION="1.30.1"
+ARG TOOLBOX_VERSION="1.55.1"
 
 FROM ${BASE_IMAGE} as phpbase
 
@@ -57,7 +57,7 @@ ENV PATH="$PATH:$TOOLBOX_TARGET_DIR:${COMPOSER_HOME}/vendor/bin:$TOOLBOX_TARGET_
 COPY --from=toolbox /toolbox $TOOLBOX_TARGET_DIR/toolbox
 COPY --from=composer:2 /usr/bin/composer $TOOLBOX_TARGET_DIR/composer
 COPY entrypoint.sh /entrypoint.sh
-
+RUN apk add dirmngr
 RUN php $TOOLBOX_TARGET_DIR/toolbox install
 
 WORKDIR $TOOLBOX_TARGET_DIR
