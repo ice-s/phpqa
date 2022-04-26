@@ -1,7 +1,7 @@
 ARG PHP_VERSION=7.4.28
 ARG BASE_IMAGE=php:${PHP_VERSION}-alpine
 ARG TOOLBOX_EXCLUDED_TAGS="exclude-php:${PHP_VERSION}"
-ARG TOOLBOX_VERSION="1.55.1"
+ARG TOOLBOX_VERSION="1.59.0"
 
 FROM ${BASE_IMAGE} as phpbase
 
@@ -22,7 +22,6 @@ RUN apk add --no-cache --virtual .tool-deps $TOOL_DEPS $LIB_DEPS \
  && echo "pcov.enabled=0" >> $PHP_INI_DIR/php.ini \
  && apk del .build-deps
 
-RUN docker-php-ext-install -j$(nproc) iconv
 RUN docker-php-ext-install sockets
 
 RUN apk update \
