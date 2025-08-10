@@ -18,5 +18,5 @@ RUN apk update \
 RUN docker-php-ext-install gd
 RUN docker-php-ext-install exif
 RUN apk add --no-cache php81-pecl-imagick \
-    && ln -s /usr/lib/php81/modules/imagick.so /usr/local/lib/php/extensions/no-debug-non-zts-20230831/ \
+    && ln -s /usr/lib/php81/modules/imagick.so /usr/local/lib/php/extensions/no-debug-non-zts-20210902/ \
     && docker-php-ext-enable imagick
